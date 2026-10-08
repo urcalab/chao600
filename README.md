@@ -15,7 +15,7 @@ iOS no deja bloquear por patrón. Una Call Directory Extension (CallKit) necesit
 - **Estado compartido.** El avance (`loaded.json`) y la configuración (`settings.json`) viven en el contenedor del App Group, escritos de forma atómica para que app y extensión siempre lean lo último.
 - **Recuperación.** Si iOS reconstruye la lista por su cuenta (por ejemplo, al reactivar la extensión en Ajustes), queda solo la primera tanda; la app la completa al abrirse o en una actualización en segundo plano.
 - **Formato sin +56 (opcional).** Por si el operador entrega el número en formato nacional. Duplica la carga a 22M.
-- **Privacidad.** Sin red, sin analítica, sin acceso a contactos ni al historial de llamadas.
+- **Privacidad.** Sin red, sin analítica, sin acceso a contactos ni al historial de llamadas. Ver [PRIVACY.md](PRIVACY.md).
 
 ## Correr en el iPhone
 
