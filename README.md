@@ -2,6 +2,8 @@
 
 App iOS local-first con una sola función: bloquear las llamadas entrantes de números **600** y **809** en Chile.
 
+**Pruébala en TestFlight:** https://testflight.apple.com/join/FcNEGbNb
+
 ## Cómo funciona
 
 iOS no deja bloquear por patrón. Una Call Directory Extension (CallKit) necesita la lista completa de números, así que Chao 600 los lista todos:
