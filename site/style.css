@@ -255,7 +255,9 @@ h2 {
 /* Privacy page */
 .doc { padding: 40px 0 24px; }
 .doc h1 { font-size: clamp(34px, 7vw, 48px); text-align: left; margin: 0 0 24px; max-width: none; }
-.doc ul { padding-left: 1.2em; color: var(--muted); display: grid; gap: 10px; }
+.doc h2 { font-size: 21px; margin: 36px 0 8px; }
+.doc p { color: var(--muted); margin: 0; }
+.doc ul { padding-left: 1.2em; color: var(--muted); display: grid; gap: 10px; margin: 0; }
 .doc strong { color: var(--ink); }
 
 @media (max-width: 560px) {

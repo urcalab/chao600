@@ -37,6 +37,12 @@ final class BlockerModel {
     }
 
     func refresh() async {
+        #if DEBUG
+        if let status = Self.screenshotStatus {
+            self.status = status
+            return
+        }
+        #endif
         do {
             switch try await manager.enabledStatusForExtension(withIdentifier: extensionID) {
             case .enabled:
@@ -107,6 +113,17 @@ final class BlockerModel {
             }
         }
     }
+
+    #if DEBUG
+    /// App Store screenshots come from the simulator, where CallKit doesn't run:
+    /// launch with `-screenshot protected|loading|setup` to show that state.
+    private static let screenshotStatus: Status? = switch UserDefaults.standard.string(forKey: "screenshot") {
+    case "protected": .active(total: 11_000_000)
+    case "loading": .loading(done: 4_000_000, total: 11_000_000)
+    case "setup": .needsSetup
+    default: nil
+    }
+    #endif
 
     private static func message(for error: any Error) -> String {
         switch (error as? CXErrorCodeCallDirectoryManagerError)?.code {

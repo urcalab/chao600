@@ -124,17 +124,18 @@ def png(source, target, width, height=None, opaque=False):
     print("wrote", target.relative_to(ROOT))
 
 
-write(BRANDING / "icon.svg", svg(1024, 1024, mark(False)))
-write(BRANDING / "logo.svg", svg(1024, 1024, mark(True)))
-write(BRANDING / "logo-horizontal.svg", lockup(INK))
-write(BRANDING / "logo-horizontal-white.svg", lockup(INK_ON_DARK))
-write(BRANDING / "og.svg", social_card())
+if __name__ == "__main__":
+    write(BRANDING / "icon.svg", svg(1024, 1024, mark(False)))
+    write(BRANDING / "logo.svg", svg(1024, 1024, mark(True)))
+    write(BRANDING / "logo-horizontal.svg", lockup(INK))
+    write(BRANDING / "logo-horizontal-white.svg", lockup(INK_ON_DARK))
+    write(BRANDING / "og.svg", social_card())
 
-png(BRANDING / "icon.svg", APP_ICON, 1024, opaque=True)
-png(BRANDING / "logo.svg", BRANDING / "logo.png", 1024)
-for name in ("logo.svg", "logo-horizontal.svg", "logo-horizontal-white.svg"):
-    write(SITE / name, (BRANDING / name).read_text())
-write(SITE / "favicon.svg", (BRANDING / "logo.svg").read_text())
-png(BRANDING / "logo.svg", SITE / "favicon-32.png", 32)
-png(BRANDING / "icon.svg", SITE / "apple-touch-icon.png", 180, opaque=True)
-png(BRANDING / "og.svg", SITE / "og.png", 1200, 630)
+    png(BRANDING / "icon.svg", APP_ICON, 1024, opaque=True)
+    png(BRANDING / "logo.svg", BRANDING / "logo.png", 1024)
+    for name in ("logo.svg", "logo-horizontal.svg", "logo-horizontal-white.svg"):
+        write(SITE / name, (BRANDING / name).read_text())
+    write(SITE / "favicon.svg", (BRANDING / "logo.svg").read_text())
+    png(BRANDING / "logo.svg", SITE / "favicon-32.png", 32)
+    png(BRANDING / "icon.svg", SITE / "apple-touch-icon.png", 180, opaque=True)
+    png(BRANDING / "og.svg", SITE / "og.png", 1200, 630)
