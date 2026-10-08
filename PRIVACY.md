@@ -9,4 +9,6 @@ Chao 600 no recopila, guarda ni comparte datos personales.
 
 El código es abierto: puedes revisarlo en este repositorio.
 
+**Sitio web.** chao600.com cuenta visitas y clics en el botón de descarga con [Umami](https://umami.is), una analítica alojada por Urcalab que no usa cookies ni guarda datos personales.
+
 Preguntas: abre un issue en https://github.com/urcalab/chao600/issues.
