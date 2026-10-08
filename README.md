@@ -26,6 +26,13 @@ iOS no deja bloquear por patrón. Una Call Directory Extension (CallKit) necesit
 
 El simulador no tiene bloqueo de llamadas: ahí la app muestra "iOS no respondió (código 0)". Hay que probar en un iPhone.
 
+### Con tu propia cuenta de Apple
+
+Cambia el equipo y los identificadores por los tuyos:
+
+- `DEVELOPMENT_TEAM` y `PRODUCT_BUNDLE_IDENTIFIER` en el proyecto (la extensión debe ser `<bundle de la app>.CallDirectory`).
+- El App Group en `Config/*.entitlements` y en `SharedState.appGroup`.
+
 ## Estructura
 
 ```
@@ -43,3 +50,7 @@ scripts/check-plan.sh
 ```
 
 Comprueba los rangos y simula el protocolo app ↔ extensión ↔ CallKit con recargas fallidas, recargas completas iniciadas por iOS y cambios de configuración: CallKit siempre termina con exactamente los números del plan, sin duplicados.
+
+## Licencia
+
+MIT. Ver [LICENSE](LICENSE).
