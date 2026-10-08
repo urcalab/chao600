@@ -42,7 +42,19 @@ Chao600/          App (SwiftUI): estado, interfaz, recargas de la extensión
 CallDirectory/    Call Directory Extension: agrega una tanda por recarga
 Shared/           Código de ambos targets: plan de números, estado compartido, manifiesto de privacidad
 Config/           Info.plist y entitlements
-scripts/          Verificaciones y generador del ícono
+branding/         Logo (SVG/PNG) y su generador
+site/             Landing de chao600.com (HTML estático, Cloudflare Pages)
+scripts/          Verificaciones
+```
+
+## Logo y sitio
+
+`branding/make-logo.py` genera el logo, el ícono de la app, los favicons y la imagen para redes desde un solo diseño, con la tipografía Nunito Black (SIL OFL) convertida a trazos. Necesita `pip install fonttools` y `brew install librsvg imagemagick`.
+
+El sitio no tiene build: se publica la carpeta `site/` tal cual.
+
+```sh
+npx wrangler pages deploy site --project-name chao600 --branch main
 ```
 
 ## Verificación
