@@ -2,7 +2,7 @@
 
 App iOS local-first con una sola función: bloquear las llamadas entrantes de números **600** y **809** en Chile.
 
-**Pruébala en TestFlight:** https://testflight.apple.com/join/FcNEGbNb
+**Sitio:** https://chao600.com · **Pruébala en TestFlight:** https://testflight.apple.com/join/FcNEGbNb
 
 ## Cómo funciona
 
@@ -51,10 +51,10 @@ scripts/          Verificaciones
 
 `branding/make-logo.py` genera el logo, el ícono de la app, los favicons y la imagen para redes desde un solo diseño, con la tipografía Nunito Black (SIL OFL) convertida a trazos. Necesita `pip install fonttools` y `brew install librsvg imagemagick`.
 
-El sitio no tiene build: se publica la carpeta `site/` tal cual.
+El sitio no tiene build: Cloudflare sirve la carpeta `site/` tal cual en https://chao600.com (configuración en `wrangler.jsonc`).
 
 ```sh
-npx wrangler pages deploy site --project-name chao600 --branch main
+npx wrangler deploy
 ```
 
 ## Verificación
