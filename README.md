@@ -4,7 +4,17 @@ App iOS local-first con una sola función: bloquear las llamadas entrantes de n�
 
 **Sitio:** https://chao600.com · **Descárgala en la App Store:** https://apps.apple.com/cl/app/chao-600/id6820609522
 
-## Cómo funciona
+## Android
+
+En `android/` hay la versión Android (Kotlin + Compose, mín. Android 10). Usa un `CallScreeningService`, que sí permite bloquear por patrón: no hay listas de millones de números. Bloquea `600 XXX XXXX` y `809 XXX XXX` en formato `+56`, `56` o nacional, no pide ningún permiso y guarda el registro de bloqueadas solo en el teléfono. Una sola pantalla: estado, prefijos y registro.
+
+```sh
+cd android && ./gradlew testDebugUnitTest installDebug
+```
+
+Para publicar en Play Store, ver [android/store/LISTING.md](android/store/LISTING.md).
+
+## Cómo funciona (iOS)
 
 iOS no deja bloquear por patrón. Una Call Directory Extension (CallKit) necesita la lista completa de números, así que Chao 600 los lista todos:
 

@@ -267,5 +267,51 @@ h2 {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cta { transition: none; }
+  .cta, .store { transition: none; }
+}
+
+/* App Store / Google Play buttons. */
+.stores {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+}
+
+.store {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 24px 12px 20px;
+  border-radius: 18px;
+  text-decoration: none;
+  text-align: left;
+  font-family: ui-rounded, "SF Pro Rounded", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.store span { display: flex; flex-direction: column; line-height: 1.15; }
+.store small { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+.store b { font-size: 24px; font-weight: 700; }
+.store-ico { width: 30px; height: 30px; flex: none; }
+
+.store-apple {
+  color: #fff;
+  background: linear-gradient(135deg, #2f5470, #3f7c68);
+  border: 1px solid rgba(255, 255, 255, .18);
+  box-shadow: 0 10px 28px -12px rgba(47, 84, 112, .7);
+}
+.store-apple:hover { transform: translateY(-1px); box-shadow: 0 14px 30px -12px rgba(47, 84, 112, .8); }
+.store-apple:active { transform: translateY(0); }
+
+.store-play {
+  color: #2f5470;
+  background: #dfe8ee;
+  border: 1px solid #bcc9d3;
+  cursor: default;
+}
+.store-play small { color: #5a7387; }
+
+@media (prefers-color-scheme: dark) {
+  .store-play { color: #cfe0ec; background: #1d252c; border-color: #33424e; }
+  .store-play small { color: #8da4b5; }
 }
