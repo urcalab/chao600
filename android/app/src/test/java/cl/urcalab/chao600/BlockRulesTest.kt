@@ -39,6 +39,25 @@ class BlockRulesTest {
         assertNull(BlockRules.match("6001234567", BlockConfig(block600 = false, block809 = false)))
     }
 
+    @Test fun normalizesOnly600And809() {
+        listOf("+56 600 123 4567", "6001234567", "0056 600 123 4567", "(600) 123-4567")
+            .forEach { assertEquals(it, "6001234567", BlockRules.normalize(it)) }
+        assertEquals("809123456", BlockRules.normalize("+56809123456"))
+        listOf("+56912345678", "600123", "800123456", "", null).forEach { assertNull(it, BlockRules.normalize(it)) }
+    }
+
+    @Test fun allowedNumbersRingInEveryFormat() {
+        val config = BlockConfig(allowed = setOf("6001234567", "809123456"))
+        listOf("+566001234567", "566001234567", "6001234567", "600 123 4567", "0056 600 123 4567", "+56809123456", "809123456")
+            .forEach { assertNull(it, BlockRules.match(it, config)) }
+    }
+
+    @Test fun allowingOneNumberKeepsBlockingTheRest() {
+        val config = BlockConfig(allowed = setOf("6001234567"))
+        assertEquals(Prefix.P600, BlockRules.match("+566001234568", config))
+        assertEquals(Prefix.P809, BlockRules.match("809123456", config))
+    }
+
     @Test fun formatsNumbers() {
         assertEquals("600 123 4567", formatNumber("+566001234567"))
         assertEquals("809 123 456", formatNumber("809123456"))

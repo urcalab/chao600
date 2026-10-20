@@ -18,7 +18,11 @@ final class CallDirectoryHandler: CXCallDirectoryProvider {
         if request.removeAll {
             context.removeAllBlockingEntries()
         }
-        if let slice = request.slice {
+        // Numbers the user now allows come out of the list already loaded.
+        for number in request.removals {
+            context.removeBlockingEntry(withPhoneNumber: CXCallDirectoryPhoneNumber(number))
+        }
+        for slice in request.additions {
             var number = slice.first
             while number <= slice.last {
                 // Drain autoreleased objects regularly to keep the extension under its memory limit.

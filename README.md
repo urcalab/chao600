@@ -6,7 +6,7 @@ App iOS local-first con una sola función: bloquear las llamadas entrantes de n�
 
 ## Android
 
-En `android/` hay la versión Android (Kotlin + Compose, mín. Android 10). Usa un `CallScreeningService`, que sí permite bloquear por patrón: no hay listas de millones de números. Bloquea `600 XXX XXXX` y `809 XXX XXX` en formato `+56`, `56` o nacional, no pide ningún permiso y guarda el registro de bloqueadas solo en el teléfono. Una sola pantalla: estado, prefijos y registro.
+En `android/` hay la versión Android (Kotlin + Compose, mín. Android 10). Usa un `CallScreeningService`, que sí permite bloquear por patrón: no hay listas de millones de números. Bloquea `600 XXX XXXX` y `809 XXX XXX` en formato `+56`, `56` o nacional, no pide ningún permiso y guarda el registro de bloqueadas solo en el teléfono. Una sola pantalla: estado, prefijos, números siempre permitidos y registro.
 
 ```sh
 cd android && ./gradlew testDebugUnitTest installDebug
@@ -26,7 +26,7 @@ iOS no deja bloquear por patrón. Una Call Directory Extension (CallKit) necesit
 - **Carga por tandas.** Una extensión no alcanza a cargar millones de números en una sola pasada (se reportan fallas cerca de 2M), así que la app recarga la extensión en modo incremental, 1M números por recarga, hasta completar los 11M. Si una recarga falla, la tanda se reduce a la mitad (mínimo 125k).
 - **Estado compartido.** El avance (`loaded.json`) y la configuración (`settings.json`) viven en el contenedor del App Group, escritos de forma atómica para que app y extensión siempre lean lo último.
 - **Recuperación.** Si iOS reconstruye la lista por su cuenta (por ejemplo, al reactivar la extensión en Ajustes), queda solo la primera tanda; la app la completa al abrirse o en una actualización en segundo plano.
-- **Formato sin +56 (opcional).** Por si el operador entrega el número en formato nacional. Duplica la carga a 22M.
+- **Siempre permitir.** Hasta 100 números 600/809 que el usuario quiere recibir. No entran en el `id` del plan: la extensión los quita de la lista ya cargada (`removeBlockingEntry`) o los saltea al cargar la tanda que los contiene, sin recargar los 11M. Quitar uno de la lista lo vuelve a bloquear.
 - **Privacidad.** Sin red, sin analítica, sin acceso a contactos ni al historial de llamadas. Ver [PRIVACY.md](PRIVACY.md).
 
 ## Correr en el iPhone

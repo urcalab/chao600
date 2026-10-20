@@ -24,14 +24,7 @@ struct ContentView: View {
                     Text("Bloquear")
                 }
 
-                Section {
-                    Toggle("Incluir números sin +56", isOn: $model.config.includeNationalFormat)
-                        .tint(.green)
-                } header: {
-                    Text("Avanzado")
-                } footer: {
-                    Text("Actívalo solo si te siguen entrando llamadas 600 u 809. Duplica los números a cargar.")
-                }
+                AllowedSection()
 
                 Section {
                 } footer: {
@@ -40,6 +33,56 @@ struct ContentView: View {
                 }
             }
             .navigationTitle("Chao 600")
+        }
+    }
+}
+
+/// 600 and 809 numbers the user does want to receive, such as their isapre or bank.
+private struct AllowedSection: View {
+    @Environment(BlockerModel.self) private var model
+    @State private var isAdding = false
+    @State private var text = ""
+    @State private var problem: String?
+
+    var body: some View {
+        Section {
+            ForEach(model.config.allowed, id: \.self) { number in
+                Text(AllowedNumber.format(number))
+                    .font(.body.monospacedDigit())
+                    .swipeActions {
+                        Button("Quitar", role: .destructive) { model.stopAllowing(number) }
+                    }
+            }
+            Button {
+                text = ""
+                isAdding = true
+            } label: {
+                Label("Agregar número", systemImage: "plus.circle.fill")
+            }
+        } header: {
+            Text("Siempre permitir")
+        } footer: {
+            Text("Números 600 u 809 que sí quieres que suenen, como tu isapre o tu banco. Se guardan solo en tu iPhone.")
+        }
+        .alert("Agregar número", isPresented: $isAdding) {
+            TextField("600 123 4567", text: $text)
+                .keyboardType(.phonePad)
+            Button("Cancelar", role: .cancel) {}
+            Button("Agregar") {
+                switch model.allow(text) {
+                case .added: break
+                case .invalid: problem = "Escribe un número 600 (10 dígitos) o 809 (9 dígitos)."
+                case .duplicate: problem = "Ese número ya está en la lista."
+                case .full: problem = "La lista llegó al máximo de \(BlockConfig.maxAllowed) números."
+                }
+            }
+        } message: {
+            Text("Un número 600 u 809, con o sin +56.")
+        }
+        .alert("No se pudo agregar", isPresented: Binding(get: { problem != nil }, set: { if !$0 { problem = nil } })) {
+            Button("Entendido", role: .cancel) {}
+        } message: {
+            Text(problem ?? "")
         }
     }
 }
