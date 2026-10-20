@@ -21,8 +21,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -30,6 +32,7 @@ import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
@@ -50,6 +53,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
@@ -159,6 +163,7 @@ private fun Screen(store: BlockStore) {
                 )
             }
         }
+        item { AllowedCard(config.allowed, onChange = { store.setConfig(config.copy(allowed = it)) }) }
         item {
             Row(Modifier.fillMaxWidth().padding(top = 8.dp), verticalAlignment = Alignment.CenterVertically) {
                 Text("Llamadas bloqueadas", fontSize = 20.sp, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
@@ -231,6 +236,72 @@ private fun StatusCard(isHeld: Boolean, config: BlockConfig, blocked: Int, reque
                 Button(onClick = requestRole, modifier = Modifier.fillMaxWidth()) { Text("Activar bloqueo") }
             }
         }
+    }
+}
+
+/** 600 and 809 numbers the user does want to receive, such as their isapre or bank. */
+@Composable
+private fun AllowedCard(allowed: Set<String>, onChange: (Set<String>) -> Unit) {
+    val colors = MaterialTheme.colorScheme
+    var isAdding by remember { mutableStateOf(false) }
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = colors.surfaceContainer),
+    ) {
+        Column(Modifier.padding(vertical = 8.dp)) {
+            Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                Text("Siempre permitir", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                Text(
+                    "Números 600 u 809 que sí quieres que suenen, como tu isapre o tu banco. Se guardan solo en tu teléfono.",
+                    color = colors.onSurfaceVariant,
+                    fontSize = 13.sp,
+                )
+            }
+            allowed.sorted().forEach { number ->
+                Row(Modifier.fillMaxWidth().padding(start = 16.dp, end = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Text(formatNumber(number), fontSize = 16.sp, fontFamily = FontFamily.Monospace, modifier = Modifier.weight(1f))
+                    TextButton(onClick = { onChange(allowed - number) }) { Text("Quitar") }
+                }
+            }
+            TextButton(onClick = { isAdding = true }, modifier = Modifier.padding(horizontal = 8.dp)) { Text("Agregar número") }
+        }
+    }
+
+    if (isAdding) {
+        var text by remember { mutableStateOf("") }
+        val number = BlockRules.normalize(text)
+        val problem = when {
+            text.isBlank() || number == null -> "Un número 600 (10 dígitos) o 809 (9 dígitos), con o sin +56."
+            number in allowed -> "Ese número ya está en la lista."
+            allowed.size >= BlockRules.MAX_ALLOWED -> "La lista llegó al máximo de ${BlockRules.MAX_ALLOWED} números."
+            else -> null
+        }
+        AlertDialog(
+            onDismissRequest = { isAdding = false },
+            title = { Text("Agregar número") },
+            text = {
+                OutlinedTextField(
+                    value = text,
+                    onValueChange = { text = it },
+                    placeholder = { Text("600 123 4567") },
+                    supportingText = { Text(problem ?: "Listo para agregar.") },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    enabled = problem == null && number != null,
+                    onClick = {
+                        if (number != null) onChange(allowed + number)
+                        isAdding = false
+                    },
+                ) { Text("Agregar") }
+            },
+            dismissButton = { TextButton(onClick = { isAdding = false }) { Text("Cancelar") } },
+        )
     }
 }
 

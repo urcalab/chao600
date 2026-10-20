@@ -20,7 +20,11 @@ class BlockStore private constructor(context: Context) {
     private val lock = Any()
 
     private val _config = MutableStateFlow(
-        BlockConfig(prefs.getBoolean(KEY_600, true), prefs.getBoolean(KEY_809, true)),
+        BlockConfig(
+            prefs.getBoolean(KEY_600, true),
+            prefs.getBoolean(KEY_809, true),
+            prefs.getStringSet(KEY_ALLOWED, null)?.toSet().orEmpty(),
+        ),
     )
     val config: StateFlow<BlockConfig> = _config.asStateFlow()
 
@@ -28,7 +32,11 @@ class BlockStore private constructor(context: Context) {
     val log: StateFlow<List<BlockedCall>> = _log.asStateFlow()
 
     fun setConfig(config: BlockConfig) {
-        prefs.edit().putBoolean(KEY_600, config.block600).putBoolean(KEY_809, config.block809).apply()
+        prefs.edit()
+            .putBoolean(KEY_600, config.block600)
+            .putBoolean(KEY_809, config.block809)
+            .putStringSet(KEY_ALLOWED, config.allowed)
+            .apply()
         _config.value = config
     }
 
@@ -59,6 +67,7 @@ class BlockStore private constructor(context: Context) {
     companion object {
         private const val KEY_600 = "block600"
         private const val KEY_809 = "block809"
+        private const val KEY_ALLOWED = "allowed"
         private const val KEY_LOG = "log"
         const val MAX_ENTRIES = 500
 

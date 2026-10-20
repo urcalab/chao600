@@ -8,7 +8,6 @@ Abre la app y toca **Abrir Ajustes**. Enciende Chao 600 en *Bloqueo e identifica
 
 - Revisa que la app diga **Protegido**. Si se quedó cargando, ábrela y déjala abierta un momento.
 - Revisa que Chao 600 siga encendida en *Ajustes → Apps → Teléfono → Bloqueo e identificación de llamadas*.
-- Algunos operadores entregan el número sin el +56. Activa **Incluir números sin +56** en la app.
 
 ## Quiero recibir las llamadas de mi banco
 

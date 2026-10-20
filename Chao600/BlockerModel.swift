@@ -55,6 +55,21 @@ final class BlockerModel {
         }
     }
 
+    enum AllowResult { case added, invalid, duplicate, full }
+
+    /// Adds a 600/809 number the user wants to keep ringing. Takes effect without reloading the list.
+    func allow(_ text: String) -> AllowResult {
+        guard let number = AllowedNumber.parse(text) else { return .invalid }
+        guard !config.allowed.contains(number) else { return .duplicate }
+        guard config.allowed.count < BlockConfig.maxAllowed else { return .full }
+        config.allowed = (config.allowed + [number]).sorted()
+        return .added
+    }
+
+    func stopAllowing(_ number: Int64) {
+        config.allowed.removeAll { $0 == number }
+    }
+
     func openSettings() async {
         try? await manager.openSettings()
     }
@@ -77,7 +92,7 @@ final class BlockerModel {
             let plan = BlockPlan(config: shared.config)
             let before = shared.loaded
             let done = before.planID == plan.id ? before.count : 0
-            if before.planID == plan.id, done >= plan.total {
+            if plan.isLoaded(before) {
                 status = .active(total: plan.total)
                 return
             }
