@@ -2,7 +2,7 @@
 
 App iOS local-first con una sola función: bloquear las llamadas entrantes de números **600** y **809** en Chile.
 
-**Sitio:** https://chao600.com · **Pruébala en TestFlight:** https://testflight.apple.com/join/FcNEGbNb
+**Sitio:** https://chao600.com · **Descárgala en la App Store:** https://apps.apple.com/cl/app/chao-600/id6820609522
 
 ## Android
 
