@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Chao 600 en Android</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Roboto+Mono:wght@500;700&family=Roboto:wght@400;500;700;900&display=block" rel="stylesheet">
+<style>
+:root { --red: #DF243C; --ink: #16161A; --muted: #5B5B63; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #D0103A; }
+#stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: Nunito, sans-serif; }
+.bg { position: absolute; inset: 0; background: linear-gradient(180deg, #FF5A5F 0%, #D0103A 100%); }
+.bg::after { content: ""; position: absolute; inset: 0; background: radial-gradient(900px 700px at 50% 22%, rgba(255,255,255,.16), transparent 70%); }
+.scene { position: absolute; inset: 0; }
+[data-in] { visibility: hidden; opacity: 0; }
+
+/* Titulares */
+.h { position: absolute; left: 0; right: 0; text-align: center; color: #fff; font-weight: 900; line-height: 1.04; letter-spacing: -1px; text-shadow: 0 10px 30px rgba(90,0,18,.28); }
+.h small { display: block; font-size: .5em; font-weight: 800; letter-spacing: 0; opacity: .92; margin-top: 14px; line-height: 1.2; }
+.emoji { position: absolute; left: 0; right: 0; text-align: center; line-height: 1; }
+.tag { display: inline-block; margin-top: 18px; padding: 8px 26px; border-radius: 999px; background: #fff; color: var(--red); font-size: 40px; font-weight: 900; letter-spacing: 0; text-shadow: none; }
+
+/* Comentarios */
+.cmt { position: absolute; display: flex; gap: 22px; align-items: flex-start; padding: 26px 30px; background: #fff; border-radius: 34px; box-shadow: 0 26px 50px -20px rgba(90,0,18,.5); font-family: -apple-system, "SF Pro Text", "Helvetica Neue", sans-serif; color: var(--ink); }
+.av { flex: none; width: 72px; height: 72px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 800; font-size: 34px; }
+.cb { flex: 1; min-width: 0; }
+.meta { display: flex; gap: 12px; align-items: center; font-size: 27px; color: var(--muted); }
+.meta b { color: var(--ink); font-weight: 700; }
+.src { display: inline-flex; align-items: center; gap: 8px; font-size: 22px; padding: 3px 14px 3px 10px; border-radius: 999px; background: #F2F2F4; }
+.src::before { content: ""; width: 12px; height: 12px; border-radius: 50%; }
+.src.ig::before { background: linear-gradient(135deg, #F9A825, #E1306C 55%, #833AB4); }
+.src.tt::before { background: #111; box-shadow: -2px 0 #25F4EE, 2px 0 #FE2C55; }
+.txt { margin-top: 6px; font-size: 38px; line-height: 1.26; font-weight: 500; }
+.stack .txt { font-size: 36px; }
+.likes { flex: none; align-self: center; font-size: 28px; font-weight: 700; color: var(--red); }
+
+.stamp { position: absolute; left: 0; right: 0; margin: auto; width: max-content; padding: 18px 54px; background: #fff; color: var(--red); font-weight: 900; font-size: 140px; line-height: 1.1; border: 10px solid var(--red); border-radius: 40px; box-shadow: 0 30px 60px -20px rgba(60,0,12,.6); }
+.pill { position: absolute; left: 0; right: 0; margin: auto; width: max-content; padding: 16px 40px; background: #fff; color: var(--red); font-weight: 900; border-radius: 999px; box-shadow: 0 24px 50px -20px rgba(60,0,12,.55); }
+
+/* Teléfono */
+.phone { position: absolute; left: 260px; width: 560px; height: 1150px; padding: 16px; background: #0E0E11; border-radius: 80px; box-shadow: 0 50px 90px -30px rgba(60,0,12,.7), inset 0 0 0 3px #2B2B30; }
+.screen { position: relative; width: 528px; height: 1118px; overflow: hidden; border-radius: 66px; background: #FBF9F9; }
+.cam { position: absolute; z-index: 9; top: 16px; left: 50%; width: 22px; height: 22px; margin-left: -11px; border-radius: 50%; background: #0E0E11; }
+.layer { position: absolute; inset: 0; }
+.app { position: absolute; left: 0; top: 0; width: 411px; height: 870px; overflow: hidden; transform: scale(1.28467); transform-origin: 0 0; font-family: Roboto, sans-serif; color: #1C1B1B; background: #FBF9F9; }
+.scr { padding: 0 16px; }
+.sb { position: relative; z-index: 2; background: #FBF9F9; display: flex; align-items: center; justify-content: space-between; height: 40px; padding: 6px 30px 0; font-size: 14px; font-weight: 500; }
+.sbi { display: flex; gap: 6px; align-items: center; }
+.sbi i { display: block; background: #1C1B1B; border-radius: 2px; }
+.apptitle { padding: 10px 0 12px; font-size: 32px; font-weight: 900; letter-spacing: -.3px; }
+.card { margin-bottom: 12px; overflow: hidden; background: #fff; border-radius: 16px; }
+.status { padding: 16px; }
+.srow { display: flex; gap: 14px; }
+.srow > div { flex: 1; min-width: 0; }
+.dot { flex: none; width: 14px; height: 14px; margin-top: 6px; border-radius: 50%; }
+.st-t { font-size: 20px; font-weight: 700; }
+.st-d { position: relative; margin-top: 4px; font-size: 14px; line-height: 20px; color: #6B6566; }
+.st-d > span:nth-child(2) { position: absolute; left: 0; top: 0; }
+.mbtn { position: relative; display: flex; align-items: center; justify-content: center; height: 40px; margin-top: 12px; border-radius: 20px; background: var(--red); color: #fff; font-size: 14px; font-weight: 500; }
+.prow { display: flex; align-items: center; padding: 16px; }
+.badge { flex: none; padding: 4px 8px; border-radius: 6px; background: var(--red); color: #fff; font: 700 14px/18px "Roboto Mono", monospace; }
+.pcol { flex: 1; padding: 0 12px; }
+.pt { font-size: 16px; }
+.pd { margin-top: 2px; font-size: 13px; line-height: 18px; color: #6B6566; }
+.sw { position: relative; flex: none; width: 52px; height: 32px; border-radius: 16px; background: #2E9E5B; }
+.sw i { position: absolute; right: 4px; top: 4px; width: 24px; height: 24px; border-radius: 50%; background: #fff; }
+.hr { height: 1px; margin: 0 16px; background: #E6E0E1; }
+.allowed { padding: 8px 0; }
+.ahead { padding: 8px 16px; }
+.at { font-size: 16px; font-weight: 700; }
+.ad { margin-top: 2px; font-size: 13px; line-height: 18px; color: #6B6566; }
+.tbtn { position: relative; display: inline-block; padding: 10px 16px; margin: 0 8px; color: var(--red); font-size: 14px; font-weight: 500; }
+.arow { display: flex; align-items: center; justify-content: space-between; overflow: hidden; padding: 0 4px 0 16px; }
+.mono { font-family: "Roboto Mono", monospace; font-size: 16px; }
+.lhead { display: flex; align-items: center; justify-content: space-between; padding: 8px 0 0; }
+.lhead > span:first-child { font-size: 20px; font-weight: 700; }
+.tred { padding: 10px 12px; color: var(--red); font-size: 14px; font-weight: 500; }
+.empty { overflow: hidden; font-size: 14px; line-height: 20px; color: #6B6566; }
+.empty div { padding: 8px 0; }
+.lrow { overflow: hidden; }
+.lin { display: flex; align-items: center; gap: 12px; margin: 0 16px; padding: 12px 0; }
+.lrow + .lrow .lin { border-top: 1px solid #E6E0E1; }
+.lin .mono { flex: 1; }
+.time { font-size: 13px; color: #6B6566; }
+.foot { padding: 8px 0; font-size: 13px; line-height: 19px; color: #6B6566; }
+.tap { position: absolute; z-index: 5; left: 50%; top: 50%; width: 46px; height: 46px; margin: -23px 0 0 -23px; border-radius: 50%; background: rgba(20,20,25,.32); border: 2px solid rgba(255,255,255,.8); }
+
+/* Tienda (mock) */
+.store { background: #fff; }
+.store .sb { background: #fff; }
+.search { display: flex; align-items: center; gap: 14px; height: 48px; margin: 8px 16px 0; padding: 0 18px; border-radius: 24px; background: #EEF0F3; font-size: 16px; }
+.search b { font-size: 20px; font-weight: 400; color: #5F6368; }
+.sapp { display: flex; gap: 16px; align-items: center; padding: 24px 20px 4px; }
+.sicon { width: 72px; height: 72px; border-radius: 16px; }
+.sname { font-size: 22px; font-weight: 500; }
+.ssub { margin-top: 2px; font-size: 14px; color: #5F6368; }
+.sbw { position: relative; height: 40px; margin: 18px 20px 16px; }
+.sbtn { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; border-radius: 20px; background: #01875F; color: #fff; font-size: 14px; font-weight: 500; }
+.sprog { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; gap: 8px; font-size: 13px; color: #5F6368; }
+.strack { height: 4px; overflow: hidden; border-radius: 2px; background: #E0E3E7; }
+.sfill { width: 0; height: 100%; background: #01875F; }
+.sfeat { display: block; width: 371px; margin: 0 20px 12px; border-radius: 12px; }
+.sshots { display: flex; gap: 10px; padding: 0 20px; }
+.sshots img { height: 290px; border-radius: 12px; border: 1px solid #ECECEC; }
+.sdesc { padding: 0 20px 16px; font-size: 14px; line-height: 20px; color: #3C4043; }
+
+/* Diálogos */
+.dlgwrap { display: flex; align-items: center; justify-content: center; background: transparent; }
+.scrim { position: absolute; inset: 0; background: rgba(0,0,0,.42); }
+.sysdlg, .adlg { position: relative; width: 312px; padding: 24px; border-radius: 28px; background: #F4EFF4; }
+.dlgicon { display: block; width: 40px; height: 40px; margin: 0 auto 16px; border-radius: 10px; }
+.dlgt { font-size: 20px; line-height: 28px; text-align: center; }
+.dlgb { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 4px; margin-top: 22px; font-size: 14px; font-weight: 500; color: #6750A4; }
+.dlgb span { position: relative; padding: 10px 12px; }
+.adt { margin-bottom: 16px; font-size: 24px; line-height: 32px; }
+.field { position: relative; display: flex; align-items: center; height: 56px; padding: 0 15px; border: 2px solid var(--red); border-radius: 4px; font-size: 16px; }
+.fph { position: absolute; left: 15px; color: #79747E; }
+.caret { display: inline-block; width: 2px; height: 22px; margin-left: 1px; background: var(--red); }
+.fsup { position: relative; min-height: 38px; padding: 4px 16px 0; font-size: 12px; line-height: 16px; color: #6B6566; }
+.fsup > span:nth-child(2) { position: absolute; left: 16px; top: 4px; }
+.adb { display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px; font-size: 14px; font-weight: 500; color: var(--red); }
+.adb span { position: relative; padding: 10px 12px; }
+
+/* Comparación */
+.cmp { position: absolute; left: 90px; width: 900px; padding: 30px 34px 34px; background: #fff; border-radius: 34px; box-shadow: 0 26px 50px -20px rgba(90,0,18,.5); }
+.cmp-t { display: flex; align-items: center; gap: 16px; margin-bottom: 22px; font-size: 44px; font-weight: 900; color: var(--ink); }
+.cmp-t img { width: 56px; height: 56px; border-radius: 13px; }
+.cmp-t span { font-size: 28px; font-weight: 700; color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; gap: 14px; }
+.chip { display: inline-flex; align-items: center; gap: 12px; padding: 12px 24px; border-radius: 999px; background: #F2F2F4; font-family: -apple-system, "Helvetica Neue", sans-serif; font-size: 34px; font-weight: 600; color: var(--ink); }
+.chip i { display: none; font-style: normal; font-weight: 900; }
+.chip.no { background: #FDECEE; color: var(--red); }
+.chip.no span { text-decoration: line-through; text-decoration-thickness: 3px; }
+.chip.ok { background: #E6F5EC; color: #1E7F46; }
+.chip.no i, .chip.ok i { display: inline; }
+
+.word { position: absolute; left: 0; right: 0; margin: auto; width: max-content; padding: 14px 44px; background: #fff; color: var(--red); font-size: 96px; font-weight: 900; line-height: 1.1; border-radius: 32px; box-shadow: 0 26px 50px -20px rgba(60,0,12,.55); }
+.stores { position: absolute; left: 0; right: 0; display: flex; justify-content: center; gap: 24px; }
+.stores span { padding: 18px 40px; border: 4px solid #fff; border-radius: 999px; color: #fff; font-size: 46px; font-weight: 900; }
+</style>
+</head>
+<body>
+<div id="stage"><div class="bg"></div></div>
+<script>
+const VERSION = new URLSearchParams(location.search).get('v') || 'ig';
+const DURATION = 50;
+
+// ---------- Piezas ----------
+const PALETTE = ['#F59E0B', '#10B981', '#3B82F6', '#8B5CF6', '#EC4899', '#14B8A6', '#F97316', '#6366F1', '#0EA5E9', '#84CC16'];
+const hash = s => [...s].reduce((h, c) => (h * 31 + c.codePointAt(0)) >>> 0, 7);
+const initial = u => (u.match(/[A-Za-zÁÉÍÓÚÑáéíóúñ0-9]/) || ['?'])[0].toUpperCase();
+
+// Atributos de tiempo que lee el motor: entrada, salida y efecto
+function at(o) {
+  let s = ` data-in="${o.in}" data-fx="${o.fx || 'pop'}"`;
+  for (const k of ['out', 'd', 'od', 'base', 'h']) if (o[k] != null) s += ` data-${k}="${o[k]}"`;
+  return s;
+}
+
+function comment(o) {
+  const src = o.src === 'ig' ? '<span class="src ig">Instagram</span>' : '<span class="src tt">TikTok</span>';
+  return `<div class="cmt${o.cls ? ' ' + o.cls : ''}"${at(o)} style="top:${o.top}px;left:${o.left ?? 80}px;width:${o.w ?? 820}px">
+    <div class="av" style="background:${PALETTE[hash(o.user) % PALETTE.length]}">${initial(o.user)}</div>
+    <div class="cb"><div class="meta"><b>${o.user}</b>${src}</div><div class="txt">${o.text}</div></div>
+    ${o.likes ? `<div class="likes">♥ ${o.likes}</div>` : ''}
+  </div>`;
+}
+
+const tap = t => `<span class="tap"${at({ in: t, fx: 'tap', d: 0.55 })}></span>`;
+
+const statusBar = `<div class="sb"><span>17:36</span><span class="sbi">
+  <i style="width:14px;height:10px;clip-path:polygon(100% 0,100% 100%,0 100%)"></i>
+  <i style="width:14px;height:11px;border-radius:7px 7px 2px 2px"></i>
+  <i style="width:9px;height:14px"></i></span></div>`;
+
+const prefixCard = `<div class="card">
+  <div class="prow"><span class="badge">600</span><div class="pcol"><div class="pt">Números 600</div><div class="pd">Empresas con las que tienes relación: bancos, isapres, retail, cobranzas.</div></div><span class="sw"><i></i></span></div>
+  <div class="hr"></div>
+  <div class="prow"><span class="badge">809</span><div class="pcol"><div class="pt">Números 809</div><div class="pd">Telemarketing que no pediste.</div></div><span class="sw"><i></i></span></div>
+</div>`;
+
+const footer = `<div class="foot">Todo ocurre en tu teléfono. Chao 600 no pide permisos, no ve tus contactos ni tu historial y no tiene acceso a internet. Este registro solo existe aquí.</div>`;
+
+function allowedCard(extra = '') {
+  return `<div class="card allowed">
+    <div class="ahead"><div class="at">Siempre permitir</div><div class="ad">Números 600 u 809 que sí quieres que suenen, como tu isapre o tu banco. Se guardan solo en tu teléfono.</div></div>
+    ${extra}
+    <div class="tbtn">Agregar número</div>
+  </div>`;
+}
+
+const logRow = (p, n, time, t, d = 0.35) =>
+  `<div class="lrow"${at({ in: t, fx: 'grow', h: 51, d })}><div class="lin"><span class="badge">${p}</span><span class="mono">${n}</span><span class="time">${time}</span></div></div>`;
+
+// La app inactiva: "Falta un paso" con el botón Activar bloqueo
+function appOff(tapAt) {
+  return `<div class="app">${statusBar}<div class="scr">
+    <div class="apptitle">Chao 600</div>
+    <div class="card status"><div class="srow"><span class="dot" style="background:#E08A00"></span>
+      <div><div class="st-t">Falta un paso</div><div class="st-d">Elige Chao 600 como app de identificación de llamadas y spam para que Android le consulte cada llamada.</div></div></div>
+      <div class="mbtn">Activar bloqueo${tap(tapAt)}</div></div>
+    ${prefixCard}${allowedCard()}
+    <div class="lhead"><span>Llamadas bloqueadas</span></div>
+    <div class="empty"><div>Aún no has bloqueado ninguna llamada. Cuando llegue una, aparecerá aquí.</div></div>
+    ${footer}
+  </div></div>`;
+}
+
+// La app protegida. rows: llamadas bloqueadas que van apareciendo
+function appOn({ t0, rows, emptyOut, countAt, scroll, allowedExtra = '' }) {
+  const detail = countAt == null
+    ? `<span${at({ in: t0, fx: 'fade', d: 0 })}>Bloqueando 600 y 809. 3 bloqueadas.</span>`
+    : `<span${at({ in: t0, fx: 'fade', d: 0, out: countAt, od: 0.1 })}>Bloqueando 600 y 809.</span><span${at({ in: countAt + 0.05, fx: 'fade', d: 0.2 })}>Bloqueando 600 y 809. 3 bloqueadas.</span>`;
+  const empty = emptyOut == null ? '' :
+    `<div class="empty"${at({ in: t0, fx: 'grow', d: 0, h: 56, out: emptyOut, od: 0.3 })}><div>Aún no has bloqueado ninguna llamada. Cuando llegue una, aparecerá aquí.</div></div>`;
+  const borrarAt = emptyOut ?? t0;
+  const scrollAttrs = scroll ? ` data-scroll="${scroll.by}" data-scroll-at="${scroll.at}"` : '';
+  return `<div class="app">${statusBar}<div class="scr"${scrollAttrs}>
+    <div class="apptitle">Chao 600</div>
+    <div class="card status"><div class="srow"><span class="dot" style="background:#2E9E5B"></span>
+      <div><div class="st-t">Protegido</div><div class="st-d">${detail}</div></div></div></div>
+    ${prefixCard}${allowedCard(allowedExtra)}
+    <div class="lhead"><span>Llamadas bloqueadas</span><span class="tred"${at({ in: borrarAt, fx: 'fade', d: emptyOut == null ? 0 : 0.3 })}>Borrar registro</span></div>
+    ${empty}
+    <div class="card">${rows}</div>
+    ${footer}
+  </div></div>`;
+}
+
+const store = `<div class="app store">${statusBar}
+  <div class="search"><b>←</b>chao 600</div>
+  <div class="sapp"><img class="sicon" src="../../marca/logo.svg"><div><div class="sname">Chao 600</div><div class="ssub">Herramientas · Gratis</div></div></div>
+  <div class="sbw">
+    <div class="sbtn"${at({ in: 8, fx: 'fade', d: 0, out: 9.5, od: 0.1 })}>Instalar${tap(9.15)}</div>
+    <div class="sprog"${at({ in: 9.5, fx: 'fade', d: 0.1, out: 10.2, od: 0.1 })}><span>Instalando…</span><div class="strack"><div class="sfill" data-grow-from="9.5" data-grow-to="10.15"></div></div></div>
+    <div class="sbtn"${at({ in: 10.25, fx: 'fade', d: 0.1 })}>Abrir${tap(10.55)}</div>
+  </div>
+  <div class="sdesc">Bloquea llamadas 600 y 809 y revisa cuáles frenaste. Todo en tu teléfono.</div>
+  <img class="sfeat" src="../../../android/store/feature-graphic-1024x500.png">
+  <div class="sshots"><img src="../../../android/store/screenshot-1.png"><img src="../../../android/store/screenshot-2-dark.png"></div>
+</div>`;
+
+const roleDialog = `<div class="app dlgwrap"><div class="scrim"></div>
+  <div class="sysdlg"${at({ in: 13.8, fx: 'pop', d: 0.35 })}>
+    <img class="dlgicon" src="../../marca/logo.svg">
+    <div class="dlgt">¿Quieres establecer Chao 600 como tu app predeterminada de identificación de llamadas y spam?</div>
+    <div class="dlgb"><span>Cancelar</span><span>Establecer como predeterminada${tap(16.25)}</span></div>
+  </div></div>`;
+
+const addDialog = `<div class="app dlgwrap"><div class="scrim"></div>
+  <div class="adlg"${at({ in: 34.3, fx: 'pop', d: 0.35 })}>
+    <div class="adt">Agregar número</div>
+    <div class="field"><span class="fph"${at({ in: 34.3, fx: 'fade', d: 0, out: 34.7, od: 0.01 })}>600 123 4567</span><span data-type="600 123 4567" data-type-from="34.7" data-type-to="35.7"></span><span class="caret"></span></div>
+    <div class="fsup"><span${at({ in: 34.3, fx: 'fade', d: 0, out: 35.7, od: 0.05 })}>Un número 600 (10 dígitos) o 809 (9 dígitos), con o sin +56.</span><span${at({ in: 35.75, fx: 'fade', d: 0.1 })}>Listo para agregar.</span></div>
+    <div class="adb"><span>Cancelar</span><span>Agregar${tap(36.0)}</span></div>
+  </div></div>`;
+
+// ---------- Escenas ----------
+const hook = VERSION === 'tiktok'
+  ? comment({ user: 'terra', src: 'tt', text: 'Android 😂😂😂 no está 😂😂😂', top: 330, left: 130, in: 0, fx: 'fade', d: 0 })
+  : comment({ user: 'omareyesphotos', src: 'ig', text: 'Te falta la de Android somos más que Apple', likes: 5, top: 330, left: 130, in: 0, fx: 'fade', d: 0 });
+
+const asks = [
+  { user: 'dj.panico', src: 'ig', text: 'Para Android no se puede? 😞 👉👈', likes: 5 },
+  { user: 'Nicolás Araya', src: 'tt', text: 'hagala para android tambien porfavor', likes: 4 },
+  { user: 'francisco_quezada_s', src: 'ig', text: 'Y para los pobres con Android?' },
+  { user: 'CMP', src: 'tt', text: 'cuando la de Android??' },
+  { user: 'caralbertolo', src: 'ig', text: 'Y Android genio?' },
+  { user: 'Gonzalo Salazar', src: 'tt', text: 'para android?' },
+];
+
+document.getElementById('stage').insertAdjacentHTML('beforeend', `
+<section class="scene"${at({ in: 0, fx: 'fade', d: 0, out: 2.75 })}>
+  ${hook}
+  <div class="h" style="top:700px;font-size:130px"${at({ in: 0.5, fx: 'slam' })}>YA ESTÁ EN</div>
+  <div class="h" style="top:850px;font-size:200px"${at({ in: 0.75, fx: 'slam' })}>ANDROID</div>
+  <div class="emoji" style="top:1100px;font-size:210px"${at({ in: 1.1, fx: 'pop', d: 0.5 })}>🤖</div>
+</section>
+
+<section class="scene"${at({ in: 3, fx: 'fade', d: 0.25, out: 7.75 })}>
+  <div class="h" style="top:220px;font-size:84px"${at({ in: 3.1, fx: 'up' })}>Me lo pidieron en<br>Instagram y TikTok 👇</div>
+  ${asks.map((a, i) => comment({ ...a, cls: 'stack', w: 860, top: 450, in: 3.5 + i * 0.55, fx: i % 2 ? 'right' : 'left', base: `rotate(${i % 2 ? 1.2 : -1.2}deg)` })).join('')}
+  <div class="stamp" style="top:800px"${at({ in: 6.95, fx: 'slam', base: 'rotate(-8deg)' })}>¡LISTO! ✅</div>
+</section>
+
+<section class="scene"${at({ in: 8, fx: 'fade', d: 0.25, out: 24.75 })}>
+  <div class="h" style="top:225px;font-size:80px"${at({ in: 8.15, fx: 'up', out: 10.75 })}>1. Descárgala<br>en Google Play</div>
+  <div class="h" style="top:225px;font-size:80px"${at({ in: 11.0, fx: 'up', out: 13.55 })}>2. Aprieta<br>«Activar bloqueo»</div>
+  <div class="h" style="top:225px;font-size:80px"${at({ in: 13.8, fx: 'up', out: 16.75 })}>3. Elige Chao 600<small>como app de identificación de llamadas y spam</small></div>
+  <div class="h" style="top:225px;font-size:96px"${at({ in: 17.0, fx: 'slam', out: 19.75 })}>¡Listo! ✅<small>No pide ningún otro permiso</small></div>
+  <div class="h" style="top:215px;font-size:76px"${at({ in: 20.0, fx: 'up' })}>Mira cada llamada<br>que te bloqueó</div>
+
+  <div class="phone" style="top:470px"${at({ in: 8.0, fx: 'rise', d: 0.6 })}><div class="screen"><span class="cam"></span>
+    <div class="layer"${at({ in: 8, fx: 'fade', d: 0, out: 10.9, od: 0.2 })}>${store}</div>
+    <div class="layer"${at({ in: 10.9, fx: 'fade', d: 0.2, out: 16.95, od: 0.15 })}>${appOff(13.35)}</div>
+    <div class="layer"${at({ in: 13.8, fx: 'fade', d: 0.2, out: 16.75, od: 0.2 })}>${roleDialog}</div>
+    <div class="layer"${at({ in: 16.95, fx: 'fade', d: 0.15 })}>${appOn({
+      t0: 16.95, emptyOut: 20.5, countAt: 21.9, scroll: { at: 19.95, by: 220 },
+      rows: logRow('600', '600 987 6543', '17:37', 20.6) + logRow('809', '809 123 456', '17:52', 21.2) + logRow('600', '600 441 2200', '18:10', 21.8),
+    })}</div>
+  </div></div>
+
+  <div class="pill" style="top:430px;left:610px;right:auto;margin:0;font-size:40px"${at({ in: 20.9, fx: 'pop', base: 'rotate(6deg)' })}>📋 Solo en Android</div>
+  ${comment({ user: 'clandarr', src: 'ig', text: 'me acabo de dar cuenta que ya me salvó de 2 llamdas de wom :). Gracias!', top: 1270, left: 90, w: 900, in: 22.7 })}
+</section>
+
+<section class="scene"${at({ in: 25, fx: 'fade', d: 0.25, out: 32.75 })}>
+  ${comment({ user: 'Paolo Lara', src: 'tt', text: 'No hay necesidad por iPhone trae en su opciones bloquear esas llamadas spam y desconocidas', likes: 48, top: 220, left: 90, w: 900, in: 25.2 })}
+  <div class="cmp" style="top:560px"${at({ in: 26.6, fx: 'up' })}>
+    <div class="cmp-t">Silenciar desconocidos <span>(lo del celular)</span></div>
+    <div class="chips">
+      <span class="chip" data-cls="no" data-cls-at="27.25"><span>🩺 Tu doctor</span><i>✕</i></span>
+      <span class="chip" data-cls="no" data-cls-at="27.6"><span>🛵 El delivery</span><i>✕</i></span>
+      <span class="chip" data-cls="no" data-cls-at="27.95"><span>💼 La entrevista</span><i>✕</i></span>
+      <span class="chip" data-cls="no" data-cls-at="28.3"><span>☎️ 600</span><i>✕</i></span>
+    </div>
+  </div>
+  <div class="cmp" style="top:920px"${at({ in: 29.0, fx: 'up' })}>
+    <div class="cmp-t"><img src="../../marca/logo.svg">Chao 600</div>
+    <div class="chips">
+      <span class="chip" data-cls="ok" data-cls-at="29.6"><span>🩺 Tu doctor</span><i>✓</i></span>
+      <span class="chip" data-cls="ok" data-cls-at="29.9"><span>🛵 El delivery</span><i>✓</i></span>
+      <span class="chip" data-cls="ok" data-cls-at="30.2"><span>💼 La entrevista</span><i>✓</i></span>
+      <span class="chip" data-cls="no" data-cls-at="30.5"><span>☎️ 600</span><i>✕</i></span>
+      <span class="chip" data-cls="no" data-cls-at="30.8"><span>☎️ 809</span><i>✕</i></span>
+    </div>
+  </div>
+  <div class="h" style="top:1290px;font-size:96px"${at({ in: 31.3, fx: 'slam' })}>Solo bloquea<br>600 y 809</div>
+</section>
+
+<section class="scene"${at({ in: 33, fx: 'fade', d: 0.25, out: 37.75 })}>
+  ${comment({ user: 'User19754907623', src: 'tt', text: 'Y si te llaman para confirmar una hora médica? O te llaman del banco por seguridad…', likes: 6, top: 220, left: 90, w: 900, in: 33.15 })}
+  <div class="phone" style="top:490px"${at({ in: 33.45, fx: 'rise', d: 0.6 })}><div class="screen"><span class="cam"></span>
+    <div class="layer"${at({ in: 33.45, fx: 'fade', d: 0 })}>${appOn({
+      t0: 33.45,
+      rows: logRow('600', '600 987 6543', '17:37', 33.45, 0) + logRow('809', '809 123 456', '17:52', 33.45, 0) + logRow('600', '600 441 2200', '18:10', 33.45, 0),
+      allowedExtra: `<div class="arow"${at({ in: 36.35, fx: 'grow', h: 44, d: 0.35 })}><span class="mono">600 123 4567</span><span class="tbtn">Quitar</span></div>`,
+    })}</div>
+    <div class="layer"${at({ in: 34.3, fx: 'fade', d: 0.2, out: 36.15, od: 0.2 })}>${addDialog}</div>
+  </div></div>
+  <div class="pill" style="top:1480px;font-size:44px"${at({ in: 36.7, fx: 'pop' })}>💡 Idea de @404nnotf</div>
+</section>
+
+<section class="scene"${at({ in: 38, fx: 'fade', d: 0.25, out: 43.75 })}>
+  ${comment({ user: 'Nacho', src: 'tt', text: 'si lo dices por truecaller esa recopila tus datos como loco', likes: 18, top: 300, left: 90, w: 900, in: 38.2 })}
+  <div class="word" style="top:720px"${at({ in: 39.4, fx: 'slam', base: 'rotate(-3deg)' })}>GRATIS</div>
+  <div class="word" style="top:920px"${at({ in: 40.3, fx: 'slam', base: 'rotate(2deg)' })}>SIN PUBLICIDAD</div>
+  <div class="word" style="top:1120px"${at({ in: 41.2, fx: 'slam', base: 'rotate(-2deg)' })}>SIN TUS DATOS</div>
+</section>
+
+<section class="scene"${at({ in: 44, fx: 'fade', d: 0.25 })}>
+  <img src="../../marca/logo.svg" style="position:absolute;left:390px;top:420px;width:300px;height:300px;filter:drop-shadow(0 30px 40px rgba(60,0,12,.45))"${at({ in: 44.2, fx: 'pop', d: 0.5 })}>
+  <div class="h" style="top:770px;font-size:150px"${at({ in: 44.6, fx: 'slam' })}>Chao 600</div>
+  <div class="pill" style="top:1000px;font-size:80px;padding:18px 54px"${at({ in: 45.0, fx: 'pop' })}>chao600.com</div>
+  <div class="stores" style="top:1190px"${at({ in: 45.4, fx: 'up' })}><span>Google Play</span><span>App Store</span></div>
+  <div class="h" style="top:1350px;font-size:44px;font-weight:800;opacity:.9"${at({ in: 45.8, fx: 'fade', d: 0.4 })}>Gratis · Bloquea 600 y 809</div>
+</section>
+`);
+
+// ---------- Motor de tiempo: todo es función de t, así cada cuadro es reproducible ----------
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const ease = {
+  out: x => 1 - Math.pow(1 - x, 3),
+  back: x => 1 + 2.70158 * Math.pow(x - 1, 3) + 1.70158 * Math.pow(x - 1, 2),
+  inOut: x => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2),
+};
+const DEFAULT_D = { pop: 0.45, slam: 0.45, up: 0.45, left: 0.45, right: 0.45, fade: 0.3, rise: 0.6, grow: 0.35, tap: 0.55 };
+
+const actors = [...document.querySelectorAll('[data-in]')].map(el => {
+  const ds = el.dataset;
+  const fx = ds.fx || 'pop';
+  return {
+    el, fx,
+    tin: +ds.in,
+    tout: ds.out != null ? +ds.out : Infinity,
+    d: ds.d != null ? +ds.d : DEFAULT_D[fx],
+    od: ds.od != null ? +ds.od : 0.25,
+    base: ds.base || '',
+    h: ds.h != null ? +ds.h : null,
+  };
+});
+const typers = [...document.querySelectorAll('[data-type]')];
+const fills = [...document.querySelectorAll('[data-grow-from]')];
+const toggles = [...document.querySelectorAll('[data-cls-at]')];
+const carets = [...document.querySelectorAll('.caret')];
+const scrollers = [...document.querySelectorAll('[data-scroll]')];
+
+// Los comentarios del bloque 2 se apilan según su altura real, sin taparse
+let stackTop = 450;
+for (const el of document.querySelectorAll('.cmt.stack')) { el.style.top = `${stackTop}px`; stackTop += el.offsetHeight + 18; }
+
+function seek(t) {
+  for (const a of actors) {
+    const { el } = a;
+    if (t < a.tin || t >= a.tout + a.od) {
+      el.style.visibility = 'hidden';
+      el.style.opacity = 0;
+      if (a.h != null) el.style.height = '0px';
+      continue;
+    }
+    const p = a.d <= 0 ? 1 : clamp((t - a.tin) / a.d);
+    const q = t < a.tout ? 0 : clamp((t - a.tout) / a.od);
+    let o = 1, tr = '';
+    switch (a.fx) {
+      case 'pop': o = clamp(p * 3); tr = `scale(${0.5 + 0.5 * ease.back(p)})`; break;
+      case 'slam': o = clamp(p * 4); tr = `scale(${1.5 - 0.5 * ease.back(p)})`; break;
+      case 'up': o = ease.out(p); tr = `translateY(${(1 - ease.out(p)) * 60}px)`; break;
+      case 'left': o = ease.out(p); tr = `translateX(${(1 - ease.out(p)) * -160}px)`; break;
+      case 'right': o = ease.out(p); tr = `translateX(${(1 - ease.out(p)) * 160}px)`; break;
+      case 'rise': o = clamp(p * 2); tr = `translateY(${(1 - ease.out(p)) * 500}px)`; break;
+      case 'fade': o = p; break;
+      case 'tap': o = 1 - p; tr = `scale(${0.5 + 0.9 * ease.out(p)})`; break;
+      case 'grow': el.style.height = `${a.h * ease.out(p) * (1 - ease.out(q))}px`; break;
+    }
+    if (a.fx !== 'grow') o *= 1 - q;
+    el.style.visibility = 'visible';
+    el.style.opacity = o;
+    el.style.transform = `${a.base} ${tr}`.trim() || 'none';
+  }
+  for (const el of typers) {
+    const s = el.dataset.type, from = +el.dataset.typeFrom, to = +el.dataset.typeTo;
+    el.textContent = s.slice(0, Math.round(clamp((t - from) / (to - from)) * s.length));
+  }
+  for (const el of fills) {
+    el.style.width = `${clamp((t - el.dataset.growFrom) / (el.dataset.growTo - el.dataset.growFrom)) * 100}%`;
+  }
+  for (const el of toggles) el.classList.toggle(el.dataset.cls, t >= +el.dataset.clsAt);
+  for (const el of scrollers) {
+    el.style.transform = `translateY(${-el.dataset.scroll * ease.inOut(clamp((t - el.dataset.scrollAt) / 0.6))}px)`;
+  }
+  for (const el of carets) el.style.opacity = Math.floor(t * 2.5) % 2 === 0 ? 1 : 0;
+}
+
+window.seek = seek;
+window.DURATION = DURATION;
+seek(0);
+
+// Vista previa en tiempo real: abrir index.html#play
+if (location.hash === '#play') {
+  const start = performance.now();
+  const loop = now => { seek(((now - start) / 1000) % DURATION); requestAnimationFrame(loop); };
+  requestAnimationFrame(loop);
+}
+</script>
+</body>
+</html>

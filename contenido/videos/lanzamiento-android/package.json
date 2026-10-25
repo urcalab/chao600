@@ -1,0 +1,11 @@
+{
+  "name": "chao600-video-lanzamiento-android",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "render": "node render.mjs ig && node render.mjs tiktok"
+  },
+  "dependencies": {
+    "puppeteer-core": "^24.43.1"
+  }
+}
