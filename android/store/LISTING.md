@@ -19,7 +19,7 @@ Para funcionar, Android te pide elegir Chao 600 como app de identificación de l
 - **Seguridad de los datos:** no recopila ni comparte datos. Marcar "no se recopilan datos" y "sin transmisión".
 - **Permisos:** ninguno declarado. Rol `CALL_SCREENING` (se pide en pantalla). No usa permisos de registro de llamadas ni SMS.
 - **Clasificación de contenido:** sin contenido sensible. **Anuncios:** no. **Público:** 18+ no necesario; apto para todos.
-- **Gráficos:** `icon-512.png`, capturas en esta carpeta. Falta el gráfico de función 1024×500 (se puede derivar de `branding/og.svg`).
+- **Gráficos:** `icon-512.png`, capturas en esta carpeta. Falta el gráfico de función 1024×500 (se puede derivar de `contenido/marca/og.svg`).
 
 ## Publicar
 1. `keytool -genkeypair -v -keystore android/chao600-upload.jks -alias upload -keyalg RSA -keysize 2048 -validity 10000`

@@ -1,10 +1,10 @@
-// Static site for chao600.com: serves the `site/` folder, no Worker code, no logs.
-// Deploy: npx wrangler deploy
+// Static site for chao600.com: serves `public/`, no Worker code, no logs.
+// Deploy: cd site && npx wrangler deploy
 {
   "name": "chao600",
   "compatibility_date": "2026-10-06",
   "assets": {
-    "directory": "site"
+    "directory": "public"
   },
   "routes": [
     { "pattern": "chao600.com", "custom_domain": true },

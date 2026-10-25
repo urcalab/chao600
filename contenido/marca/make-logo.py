@@ -4,7 +4,7 @@ Type is Nunito Black (SIL Open Font License), converted to paths so the files do
 depend on installed fonts. Needs fonttools (pip install fonttools), rsvg-convert and
 ImageMagick (brew install librsvg imagemagick).
 
-Run: python3 branding/make-logo.py
+Run: python3 contenido/marca/make-logo.py
 """
 import subprocess
 import tempfile
@@ -17,10 +17,10 @@ from fontTools.pens.transformPen import TransformPen
 from fontTools.ttLib import TTFont
 from fontTools.varLib.instancer import instantiateVariableFont
 
-ROOT = Path(__file__).resolve().parent.parent
-BRANDING = ROOT / "branding"
-SITE = ROOT / "site"
-APP_ICON = ROOT / "Chao600/Assets.xcassets/AppIcon.appiconset/AppIcon.png"
+ROOT = Path(__file__).resolve().parents[2]
+BRANDING = ROOT / "contenido/marca"
+SITE = ROOT / "site/public"
+APP_ICON = ROOT / "ios/Chao600/Assets.xcassets/AppIcon.appiconset/AppIcon.png"
 FONT_URL = "https://github.com/google/fonts/raw/main/ofl/nunito/Nunito%5Bwght%5D.ttf"
 
 RED_TOP, RED_BOTTOM = "#FF5A5F", "#D0103A"

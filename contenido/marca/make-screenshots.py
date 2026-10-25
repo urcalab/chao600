@@ -1,9 +1,9 @@
 """Frames raw 6.9" simulator screenshots (1320×2868) for the App Store: headline on red, app below.
 
 Raw captures come from the Debug build launched with `-screenshot protected|loading|setup`
-and go in branding/screenshots/raw/. Same requirements as make-logo.py.
+and go in contenido/marca/screenshots/raw/. Same requirements as make-logo.py.
 
-Run: python3 branding/make-screenshots.py
+Run: python3 contenido/marca/make-screenshots.py
 """
 import base64
 import importlib.util
