@@ -307,8 +307,9 @@ h2 {
   color: #2f5470;
   background: #dfe8ee;
   border: 1px solid #bcc9d3;
-  cursor: default;
 }
+.store-play:hover { transform: translateY(-1px); box-shadow: 0 14px 30px -14px rgba(47, 84, 112, .5); }
+.store-play:active { transform: translateY(0); }
 .store-play small { color: #5a7387; }
 
 @media (prefers-color-scheme: dark) {
